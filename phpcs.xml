@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<ruleset name="WordPress">
+	<description>WPCharacter Rules for PHP_CodeSniffer</description>
+
+	<file>.</file>
+
+    <rule ref="WordPress" />
+
+	<!-- Exclude project directories -->
+	<exclude-pattern>.github/</exclude-pattern>
+
+	<rule ref="WordPress.Files.FileName.InvalidClassFileName">
+		<exclude-pattern>includes/*.php</exclude-pattern>
+	</rule>
+
+</ruleset>

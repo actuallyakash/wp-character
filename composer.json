@@ -1,0 +1,61 @@
+{
+    "name": "travelopia/wp-character",
+    "description": "WP Character creates a 'Character' custom post type and fetches an image from an API.",
+    "type": "wordpress-plugin",
+    "require-dev": {
+        "wp-coding-standards/wpcs": "^3.0"
+    },
+    "require": {},
+    "license": "GPL-3.0+",
+    "autoload": {
+        "psr-4": {
+            "wpcharacter\\": "includes/"
+        }
+    },
+    "authors": [
+        {
+            "name": "travelopia",
+            "email": "info@travelopia.com",
+            "homepage": "https://travelopia.com"
+        }
+    ],
+    "archive": {
+      "exclude": [
+        ".*",
+        "*.json",
+        "*.lock",
+        "*.xml",
+        "*.xml.dist",
+        "*.yml",
+        "*.config.js",
+  
+        "README.md",
+  
+        "dist",
+        "node_modules",
+        "src",
+        "tests",
+        "tmp",
+        "!/vendor",
+  
+        "/vendor/bin",
+        "/vendor/**/**/composer.*",
+        "/vendor/**/**/*.md",
+        "/vendor/**/**/.*",
+        "/vendor/composer/installers",
+  
+        "!/i18n/*.json"
+      ]
+    },
+    "scripts": {
+        "check-cs": "\"vendor/bin/phpcs\" --standard=phpcs.xml --colors",
+        "check-cs-errors": "\"vendor/bin/phpcs\" --standard=phpcs.xml --colors --error-severity=1 --warning-severity=6",
+        "fix-cs": "\"vendor/bin/phpcbf\" --standard=phpcs.xml",
+        "check-cs-raw": "vendor/bin/phpcs -ps --standard=phpcs.xml"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    }
+}
