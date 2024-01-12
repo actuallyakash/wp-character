@@ -22,7 +22,7 @@ final class WPcharacter {
 	use Traits\Singleton;
 
 	/**
-	 * WPcharacter Version.
+	 * WPCharacter Version.
 	 *
 	 * @since 1.0.0
 	 * @var string
@@ -36,7 +36,7 @@ final class WPcharacter {
 	 */
 	private function __construct() {
 
-		\add_action( 'plugins_loaded', array( __CLASS__, 'load' ) );
+		add_action( 'plugins_loaded', array( __CLASS__, 'load' ) );
 	}
 
 	/**
@@ -45,6 +45,8 @@ final class WPcharacter {
 	 * @since 1.0.0
 	 */
 	public static function load(): void {
-		
+
+		( new WPCharacterPostType() )->init();
+
 	}
 }
