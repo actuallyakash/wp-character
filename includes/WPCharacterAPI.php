@@ -62,6 +62,9 @@ final class WPCharacterAPI {
         // Get the character data.
         $character_data = json_decode( wp_remote_retrieve_body( $response ) );
 
+        // Unhooking action to prevent infinite loop.
+        remove_action( 'save_post', array( $this, 'update_character_via_api' ), 10, 2 );
+
         // Update the character post title.
         wp_update_post( array(
             'ID'         => $post_id,
