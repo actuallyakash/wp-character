@@ -19,18 +19,23 @@ namespace wpcharacter;
  */
 final class WPCharacterPostType {
 
-    public function init(): void {
+	/**
+	 * Init the Post Type Class.
+	 *
+	 * @since 1.0.0
+	 */
+	public function init(): void {
 		// Custom post type 'Character'.
 		add_action( 'init', array( $this, 'register_character_post_type' ) );
 
-        // Metabox for Character ID field.
-        add_action( 'add_meta_boxes', array( $this, 'add_character_id_metabox' ) );
+		// Metabox for Character ID field.
+		add_action( 'add_meta_boxes', array( $this, 'add_character_id_metabox' ) );
 
-        // Update post meta when creating or updating the character post.
-        add_action( 'save_post', array( $this, 'save_character_id' ), 10, 2 );
-    }
+		// Update post meta when creating or updating the character post.
+		add_action( 'save_post', array( $this, 'save_character_id' ), 10, 2 );
+	}
 
-    /**
+	/**
 	 * Register post type 'Character'.
 	 *
 	 * @since 1.0.0
@@ -72,58 +77,62 @@ final class WPCharacterPostType {
 		register_post_type( 'character', $args );
 	}
 
-    /**
-     * Add metabox for Character ID field.
-     *
-     * @since 1.0.0
-     */
-    public function add_character_id_metabox(): void {
-        add_meta_box(
-            'character_id',
-            __( 'Character ID', 'wpcharacter' ),
-            array( $this, 'render_character_id_metabox' ),
-            'character',
-            'side',
-            'default'
-        );
-    }
+	/**
+	 * Add metabox for Character ID field.
+	 *
+	 * @since 1.0.0
+	 */
+	public function add_character_id_metabox(): void {
+		add_meta_box(
+			'character_id',
+			__( 'Character ID', 'wpcharacter' ),
+			array( $this, 'render_character_id_metabox' ),
+			'character',
+			'side',
+			'default'
+		);
+	}
 
-    /**
-     * Render Character ID metabox.
-     *
-     * @since 1.0.0
-     */
-    public function render_character_id_metabox(): void {
-        $character_id = get_post_meta( get_the_ID(), 'character_id', true );
-        ?>
-        <p>Character ID:</p>
-        <input type="text" name="character_id" value="<?php echo esc_attr( $character_id ); ?>" />
-        <?php
-    }
+	/**
+	 * Render Character ID metabox.
+	 *
+	 * @since 1.0.0
+	 */
+	public function render_character_id_metabox(): void {
+		$character_id = get_post_meta( get_the_ID(), 'character_id', true );
+		?>
+		<?php wp_nonce_field( 'character_id', 'character_id_nonce' ); ?>
+		<p>Character ID:</p>
+		<input type="text" name="character_id" value="<?php echo esc_attr( $character_id ); ?>" />
+		<?php
+	}
 
-    /**
-     * Save Character ID.
-     *
-     * @since 1.0.0
-     *
-     * @param int     $post_id Post ID.
-     * @param WP_Post $post    Post object.
-     */
-    public function save_character_id( $post_id, $post ): void {
+	/**
+	 * Save Character ID.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int     $post_id Post ID.
+	 * @param WP_Post $post    Post object.
+	 */
+	public function save_character_id( $post_id, $post ): void {
 
-        if ( 'character' !== $post->post_type ) {
-            return;
-        }
+		// Verify nonce.
+		if ( ! isset( $_POST['character_id_nonce'] ) || ! wp_verify_nonce( $_POST['character_id_nonce'], 'character_id' ) ) {
+			return;
+		}
 
-        // Do not save meta on trash/untrash event.
-        if ( 'trash' === $post->post_status ) {
-            return;
-        }
+		if ( 'character' !== $post->post_type ) {
+			return;
+		}
 
-        if ( isset( $_POST['character_id'] ) ) {
-            update_post_meta( $post_id, 'character_id', sanitize_text_field( wp_unslash( $_POST['character_id'] ) ) );
-        }
+		// Do not save meta on trash/untrash event.
+		if ( 'trash' === $post->post_status ) {
+			return;
+		}
 
-    }
-
+		if ( isset( $_POST['character_id'] ) ) {
+			update_post_meta( $post_id, 'character_id', sanitize_text_field( wp_unslash( $_POST['character_id'] ) ) );
+		}
+	}
 }

@@ -13,4 +13,8 @@
 		<exclude-pattern>includes/*.php</exclude-pattern>
 	</rule>
 
+	<rule ref="WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase">
+		<exclude-pattern>includes/*.php</exclude-pattern>
+	</rule>
+
 </ruleset>
