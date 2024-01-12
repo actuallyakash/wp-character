@@ -17,7 +17,7 @@ namespace wpcharacter;
  *
  * @since 1.0.0
  */
-class WPCharacterPostType {
+final class WPCharacterPostType {
 
     public function init(): void {
 		// Custom post type 'Character'.
@@ -25,6 +25,9 @@ class WPCharacterPostType {
 
         // Metabox for Character ID field.
         add_action( 'add_meta_boxes', array( $this, 'add_character_id_metabox' ) );
+
+        // Update post meta when creating or updating the character post.
+        add_action( 'save_post', array( $this, 'save_character_id' ), 10, 2 );
     }
 
     /**
@@ -96,6 +99,31 @@ class WPCharacterPostType {
         <p>Character ID:</p>
         <input type="text" name="character_id" value="<?php echo esc_attr( $character_id ); ?>" />
         <?php
+    }
+
+    /**
+     * Save Character ID.
+     *
+     * @since 1.0.0
+     *
+     * @param int     $post_id Post ID.
+     * @param WP_Post $post    Post object.
+     */
+    public function save_character_id( $post_id, $post ): void {
+
+        if ( 'character' !== $post->post_type ) {
+            return;
+        }
+
+        // Do not save meta on trash/untrash event.
+        if ( 'trash' === $post->post_status ) {
+            return;
+        }
+
+        if ( isset( $_POST['character_id'] ) ) {
+            update_post_meta( $post_id, 'character_id', sanitize_text_field( wp_unslash( $_POST['character_id'] ) ) );
+        }
+
     }
 
 }

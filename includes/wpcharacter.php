@@ -19,7 +19,27 @@ namespace wpcharacter;
  */
 final class WPcharacter {
 
-	use Traits\Singleton;
+	/**
+	 * Singleton instance of the class.
+	 *
+	 * @var object
+	 */
+	private static $instance = null;
+
+	/**
+	 * Returns a singleton instance of the class.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return self
+	 */
+	public static function instance() {
+		if ( is_null( self::$instance ) ) {
+			self::$instance = new self();
+		}
+
+		return self::$instance;
+	}
 
 	/**
 	 * WPCharacter Version.
@@ -46,7 +66,10 @@ final class WPcharacter {
 	 */
 	public static function load(): void {
 
+		// Custom Post Type.
 		( new WPCharacterPostType() )->init();
 
+		// API.
+		( new WPCharacterAPI() )->init();
 	}
 }
